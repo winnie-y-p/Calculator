@@ -23,7 +23,7 @@ function operate(operator, a, b) {
         return subtract(a, b);
     }
 
-    if (operator === "*") {
+    if (operator === "x") {
         return multiply(a, b);
     }
 
@@ -32,40 +32,21 @@ function operate(operator, a, b) {
     }
 }
 
-const button0 = document.getElementById("0-button");
-const button1 = document.getElementById("1-button");
-const button2 = document.getElementById("2-button");
-const button3 = document.getElementById("3-button");
-const button4 = document.getElementById("4-button");
-const button5 = document.getElementById("5-button");
-const button6 = document.getElementById("6-button");
-const button7 = document.getElementById("7-button");
-const button8 = document.getElementById("8-button");
-const button9 = document.getElementById("9-button");
-const decimalButton = document.getElementById("decimal-button");
-const resetBtn = document.getElementById("reset-button");
-const backspaceBtn = document.getElementById("backspace-button");
-const divideBtn = document.getElementById("divide-button");
-const multiplyBtn = document.getElementById("multiply-button");
-const subtractBtn = document.getElementById("subtract-button");
-const addBtn = document.getElementById("add-button");
-const equalsBtn = document.getElementById("equals-button");
-const operationBtn = document.querySelectorAll(".operator");
-const numberBtn = document.querySelectorAll(".number");
-
 let num1;
 let num2;
 let operator;
-let toggleState = false; //false is when an operator has not been pressed
+let toggleNum = true; //true is when an operator has not been pressed
+const operationBtn = document.querySelectorAll(".operator");
+const numberBtns = document.querySelectorAll(".number");
+const displayOperation = document.querySelector("#display-operation")
 
 function displayOnScreen() {
-    const displayOperation = document.querySelector("#display-operation");
     let displayOutput;
 
     if (operator !== undefined) {
-        displayOutput = num1 + operator;
+        displayOutput = num1 + " " + operator;
         if (num2 !== undefined) {
-            displayOutput = num1 + operator + num2;
+            displayOutput = num1 + " " + operator + " " + num2;
         }
     } else {
         displayOutput = num1;
@@ -74,70 +55,120 @@ function displayOnScreen() {
     displayOperation.textContent = displayOutput;
 }
 
-function updateNum1() {
-    numberBtn.forEach(button => {
+function setupNumberButtons() {
+    numberBtns.forEach(button => {
         button.addEventListener("click", function () {
-            if (num1 === undefined) {
-                if (this.getAttribute("data-message") !== "0" && this.getAttribute("data-message") !== ".") {
-                    num1 = this.getAttribute("data-message");
-                }
-            } else {
-                if (!Number.isInteger(Number(num1))) {
-                    if (this.getAttribute("data-message") !== ".") {
-                        num1 += this.getAttribute("data-message")
+            if (toggleNum) {
+                if (num1 === undefined) {
+                    if (this.getAttribute("data-message") !== "0" && this.getAttribute("data-message") !== ".") {
+                        num1 = this.getAttribute("data-message");
                     }
                 } else {
-                    num1 += this.getAttribute("data-message");
+                    if (!Number.isInteger(Number(num1))) {
+                        if (this.getAttribute("data-message") !== ".") {
+                            num1 += this.getAttribute("data-message")
+                        }
+                    } else {
+                        num1 += this.getAttribute("data-message");
+                    }
+                }
+
+
+            } else {
+                if (num2 === undefined) {
+                    if (this.getAttribute("data-message") !== "0" && this.getAttribute("data-message") !== ".") {
+                        num2 = this.getAttribute("data-message");
+                    }
+                } else {
+                    if (!Number.isInteger(Number(num2))) {
+                        if (this.getAttribute("data-message") !== ".") {
+                            num2 += this.getAttribute("data-message")
+                        }
+                    } else {
+                        num2 += this.getAttribute("data-message");
+                    }
                 }
             }
-//num1 is a string
+
             displayOnScreen();
             console.log(num1);
-            return Number(num1);
+            console.log(num2)
+            console.log(operator);
+            console.log(toggleNum)
         });
     });
 }
 
-function operation() {
+function setupOperation() {
     operationBtn.forEach(button => {
         button.addEventListener("click", function () {
-            operator = this.getAttribute("data-message"); //"operator" is a string
-            displayOnScreen();
+            if (operator && num2) {
+                evaluateResult();
+                operator = this.getAttribute("data-message");
+                displayOnScreen();
+                toggleNum = false;
+            } else {
+                operator = this.getAttribute("data-message");
+                //"operator" is a string
+                displayOnScreen();
+                toggleNum = false;
+            }
+            console.log(num1);
+            console.log(num2);
             console.log(operator);
+            console.log(toggleNum);
         })
     })
 }
 
-function updateNum2() {
-    numberBtn.forEach(button => {
-        button.addEventListener("click", function () {
-            if (num2 === undefined) {
-                if (this.getAttribute("data-message") !== "0" && this.getAttribute("data-message") !== ".") {
-                    num2 = this.getAttribute("data-message");
-                }
-            } else {
-                if (!Number.isInteger(Number(num2))) {
-                    if (this.getAttribute("data-message") !== ".") {
-                        num2 += this.getAttribute("data-message")
-                    }
-                } else {
-                    num2 += this.getAttribute("data-message");
-                }
-            }
+setupNumberButtons()
+setupOperation()
 
-            displayOnScreen();
-            //num2 is a string
-            console.log(num2);
-            return Number(num2);
-        });
-    });
+const equalsBtn = document.getElementById("equals-button");
+const displayResult = document.querySelector("#display-result");
+
+function evaluateResult() {
+    if (num1 && num2 && operator) {
+        let result = operate(operator, Number(num1), Number(num2));
+        displayResult.textContent = result;
+        toggleNum = true;
+        num1 = result;
+        num2 = undefined;
+        operator = undefined;
+        console.log(num1);
+        console.log(num2)
+        console.log(operator);
+        console.log(toggleNum)
+    }
 }
 
-/*function toggleFunctions () {
-    if (
-}*/
+equalsBtn.addEventListener("click", evaluateResult);
 
 
-updateNum1();
-operation();
-updateNum2();
+const resetBtn = document.getElementById("reset-button");
+resetBtn.addEventListener("click", function () {
+    let confirmed = confirm("Do you really want to clear all data?");
+    if (confirmed) {
+        num1 = undefined;
+        num2 = undefined;
+        operator = undefined;
+        displayOperation.textContent = "0";
+        displayResult.textContent = "0";
+    } else {
+        alert("Reset canceled. Phew, that was lucky we checked ;)");
+    }
+})
+
+const backspaceBtn = document.getElementById("backspace-button");
+backspaceBtn.addEventListener("click", function () {
+    if (operator && !num2) {
+        operator = undefined;
+        displayOnScreen();
+    } else if (num2) {
+        num2 = num2.substring(0, num2.length - 1);
+        displayOnScreen();
+    } else {
+        num1 = num1.substring(0, num1.length - 1);
+        displayOnScreen();
+    }
+})

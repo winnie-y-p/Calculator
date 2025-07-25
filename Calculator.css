@@ -9,11 +9,12 @@ h1 {
 
 .calculator-outline {
     margin: 0 auto;
-    border: 2px solid #E37769;
+    border: 4px solid #E37769;
     background-color: #355952;
     width: 400px;
     height: 500px;
     border-radius: 40px;
+    box-shadow: #E37769 0px 0px 9px;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -28,6 +29,7 @@ h1 {
     color: #EAB63E;
     border: 2px solid #E37769;
     border-radius: 20px;
+    box-shadow: #EAB63E 0px 0px 5px;
     height: 100px;
     width: 340px;
     display: grid;
