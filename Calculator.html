@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <link rel="stylesheet" href="Calculator.css">
+</head>
+<body>
+<h1>Basic Calculator</h1>
+<div class="calculator-outline">
+<section class="display-container">
+  <div id="display-operation">Operation text</div>
+  <div id="display-result">Result text</div>
+</section>
+  <section class="buttons-container">
+    <button class="buttons resets" id="reset-button">Reset</button>
+    <button class="buttons resets" id="backspace-button">Del</button>
+    <button class="buttons operator" id="divide-button" data-message="/">/</button>
+    <button class="buttons operator" id="multiply-button" data-message="*">X</button>
+    <button class="buttons number" id="7-button" data-message="7">7</button>
+    <button class="buttons number" id="8-button" data-message="8">8</button>
+    <button class="buttons number" id="9-button" data-message="9">9</button>
+    <button class="buttons operator" id="subtract-button" data-message="-">-</button>
+    <button class="buttons number" id="4-button" data-message="4">4</button>
+    <button class="buttons number" id="5-button" data-message="5">5</button>
+    <button class="buttons number" id="6-button" data-message="6">6</button>
+    <button class="buttons operator" id="add-button" data-message="+">+</button>
+    <button class="buttons number" id="1-button" data-message="1">1</button>
+    <button class="buttons number" id="2-button" data-message="2">2</button>
+    <button class="buttons number" id="3-button" data-message="3">3</button>
+    <button class="buttons tall" id="equals-button">=</button>
+    <button class="buttons number wide"  id="0-button" data-message="0">0</button>
+    <button class="buttons number" id="decimal-button" data-message=".">.</button>
+  </section>
+
+
+</div>
+
+<script src="Calculator.js"></script>
+</body>
+</html>
